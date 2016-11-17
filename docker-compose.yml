@@ -1,0 +1,25 @@
+version: '2'
+
+services:
+    web:
+        image: nginx:latest
+        ports:
+            - "80:80"
+        volumes:
+            - ./:/var/www/code
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ./var/logs/nginx:/var/log/nginx
+        networks:
+            - code-network
+    php:
+        build:
+            context: .
+            dockerfile: ./docker/php/Dockerfile
+        volumes:
+            - ./:/var/www/code
+        networks:
+            - code-network
+
+networks:
+    code-network:
+        driver: bridge
